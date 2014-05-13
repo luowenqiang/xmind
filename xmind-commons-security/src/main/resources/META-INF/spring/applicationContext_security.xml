@@ -6,8 +6,11 @@
           http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd">
 
+
     <!--自动扫描组件的包，包括Service/Component等-->
-    <context:component-scan base-package="cn.org.xmind.commons.email"/>
+    <context:component-scan base-package="cn.org.xmind.commons.security.service"/>
     <!--使用注解自动配置Bean-->
     <context:annotation-config/>
+    <bean id="bCryptpasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+    <bean id="standardPasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean>
 </beans>

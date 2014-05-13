@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    
+    <!-- Properties文件读取配置 -->
+    <!--读取数据库配置的属性文件-->
+    <!--<context:property-placeholder location="classpath:jdbc.properties" />-->
+    <!--自动扫描组件的包，包括Service/Component等-->
+    <context:component-scan base-package="com.openoa.commons.service"/>
+    <context:component-scan base-package="com.openoa.identity.service"/>
+    <context:component-scan base-package="com.openoa.commons.security.service"/>
+    <!--使用注解自动配置Bean-->
+    <context:annotation-config/>
+    
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">  
+        <property name="converters">  
+            <list>  
+                <bean class="com.openoa.commons.StringToDateConverter"/>
+                <bean class="com.openoa.commons.DateToStringConverter"/>
+            </list>  
+        </property>  
+    </bean> 
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <array>
+                <value>security/messages</value>
+                <value>validate/messages</value>
+            </array>
+        </property>
+    </bean>
+    
+    <!--数据源-->
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="url" value="jdbc:mysql://w.rdc.sae.sina.com.cn:3307/app_openidea" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="username" value="4ml1my4myk" />
+        <property name="password" value="my2xi0j35wl5253zk1z1x5w325j2k15ihmmwhx2l" />
+    </bean>
+    
+    <!--使用本地容器管理的实体管理器-->    
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceXmlLocation"
+                  value="classpath:META-INF/persistence.xml" />
+    </bean>
+    <!--事务管理器-->
+    <!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>-->
+    <bean id="transactionManager" 
+          class="org.springframework.orm.jpa.JpaTransactionManager"> 
+        <property name="entityManagerFactory" ref="entityManagerFactory"/> 
+    </bean> 
+    <!--使用注解的事务驱动，只要在方法或者类上面使用@Transactional就能够使得操作支持事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!--
+        在 Spring 配置文件中启用扫描并自动创建代理的功能
+        使用此功能后，DAO的接口不再需要自己实现，而是由Spring自己实现
+        base-package表示DAO接口所在的包
+        需要Spring自动实现的DAO接口必须继承org.springframework.data.repository.Repository接口或者是它的子接口
+    -->
+    <jpa:repositories base-package="com.openoa.identity.db"
+                      entity-manager-factory-ref="entityManagerFactory" 
+                      transaction-manager-ref="transactionManager"/> 
+</beans>

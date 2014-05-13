@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -19,7 +17,7 @@ import javax.persistence.Table;
  * @author lwq
  */
 @Entity
-@Table(name = "ID_GROUP")
+@Table(name = "XID_GROUP")
 public class Group implements Serializable {
 
     private static final long serialVersionUID = 1L;

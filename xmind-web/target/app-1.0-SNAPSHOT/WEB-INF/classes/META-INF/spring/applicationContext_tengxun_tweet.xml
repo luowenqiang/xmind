@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans             http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context           http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security/oauth2   http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+   
+    <context:component-scan base-package="org.fkjava.tengxun.tweet.api"/>
+    
+    <oauth2:resource id="tengxunTweetRestResource" 
+                     type="authorization_code" 
+                     client-id="801488379" 
+                     client-secret="73dc2d80d2f1d6103e463b86fcdfa33e"
+                     access-token-uri="https://open.t.qq.com/cgi-bin/oauth2/access_token" 
+                     user-authorization-uri="https://open.t.qq.com/cgi-bin/oauth2/authorize" 
+                     scope="read,write" />
+    
+    <oauth2:resource id="sparklr" 
+                     type="authorization_code" 
+                     client-id="tonr" 
+                     client-secret="secret"
+                     access-token-uri="http://localhost:8080/sparklr2/oauth/token" 
+                     user-authorization-uri="http://localhost:8080/sparklr2/oauth/authorize" 
+                     scope="read,write" />
+    
+    <oauth2:rest-template id="tengxunTweetRestTemplate" resource="tengxunTweetRestResource" />
+</beans>

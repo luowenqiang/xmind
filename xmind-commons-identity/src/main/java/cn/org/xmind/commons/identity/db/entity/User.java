@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author rodney
  */
 @Entity
-@Table(name = "ID_USER")
+@Table(name = "XID_USER")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -120,7 +120,7 @@ public class User implements Serializable {
      * 用户和用户组的关系
      */
     @ManyToMany
-    @JoinTable(name = "ID_USER_GROUP",
+    @JoinTable(name = "XID_USER_GROUP",
     joinColumns =
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
     inverseJoinColumns =

@@ -2,12 +2,33 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
           http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
-          http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd">
+          http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+          http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--自动扫描组件的包，包括Service/Component等-->
-    <context:component-scan base-package="cn.org.xmind.commons.email"/>
+    <context:component-scan base-package="cn.org.xmind.commons.identity.service"/>
     <!--使用注解自动配置Bean-->
     <context:annotation-config/>
+    <!--使用注解的事务驱动，只要在方法或者类上面使用@Transactional就能够使得操作支持事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--实体管理器-->
+<!--    <bean id="identityEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceXmlLocation"
+                  value="classpath:META-INF/persistence.xml" />
+    </bean>-->
+    <!--
+        在 Spring 配置文件中启用扫描并自动创建代理的功能
+        使用此功能后，DAO的接口不再需要自己实现，而是由Spring自己实现
+        base-package表示DAO接口所在的包
+        需要Spring自动实现的DAO接口必须继承org.springframework.data.repository.Repository接口或者是它的子接口
+    -->
+    <jpa:repositories base-package="cn.org.xmind.commons.identity.db"
+                      entity-manager-factory-ref="entityManagerFactory" 
+                      transaction-manager-ref="transactionManager"/> 
 </beans>

@@ -10,10 +10,11 @@ import cn.org.xmind.commons.identity.db.entity.User;
 import cn.org.xmind.commons.identity.exception.IllegalActiveCodeException;
 import cn.org.xmind.commons.identity.exception.PasswordValidateFailed;
 import cn.org.xmind.commons.identity.exception.UserNotFoundException;
-import cn.org.xmind.commons.security.MultiPasswordEncoder;
+import cn.org.xmind.commons.security.service.MultiPasswordEncoder;
 import cn.org.xmind.commons.utils.MD5Utils;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class UserService {
 
     @Transactional
     public void add(User user) {
+        logger.log(Level.ALL, "添加用户信息");
         //把登录名和用户名设置为一样，页面不传递用户名过来
         user.setUserName(user.getLoginName());
         if (user.getNickName() == null) {
@@ -82,6 +84,10 @@ public class UserService {
     /**
      * 修改用户的密码，并且生成随机的salt值
      *
+     * @param userId
+     * @param oldPassword
+     * @param newPassword
+     * @param confirmPassword
      * @return
      */
     public boolean changePassword(Long userId, String oldPassword, String newPassword, String confirmPassword)
@@ -139,7 +145,7 @@ public class UserService {
 
     /**
      *
-     * @param loginName
+     * @param email
      * @return
      */
     public boolean checkEmailIsExisted(String email) {

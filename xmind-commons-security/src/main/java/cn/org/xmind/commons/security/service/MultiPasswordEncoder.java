@@ -1,4 +1,4 @@
-package cn.org.xmind.commons.security;
+package cn.org.xmind.commons.security.service;
 
 import java.util.regex.Pattern;
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ public class MultiPasswordEncoder implements PasswordEncoder {
     /**
      * 用来检查密文是否为用BCrypt算法算出来的
      */
-    private Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+    private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
     @Resource
     private BCryptPasswordEncoder bCryptpasswordEncoder;
     @Resource

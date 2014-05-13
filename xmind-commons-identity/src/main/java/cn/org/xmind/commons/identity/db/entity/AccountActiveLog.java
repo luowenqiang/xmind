@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
  * @author rodney
  */
 @Entity
-@Table(name = "ID_ACTIVE_LOG",
+@Table(name = "XID_ACTIVE_LOG",
 indexes = {
     @Index(columnList = "ACTIVE_CODE")
 })

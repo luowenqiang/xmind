@@ -2,12 +2,39 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
           http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
-          http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd">
+          http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!--自动扫描组件的包，包括Service/Component等-->
-    <context:component-scan base-package="cn.org.xmind.commons.email"/>
-    <!--使用注解自动配置Bean-->
-    <context:annotation-config/>
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/app_openidea" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="username" value="app_openidea" />
+        <property name="password" value="1234" />
+    </bean>
+    <!--    <bean id="transactionManager" 
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+        <property name="dataSource" ref="dataSource"/>
+    </bean>-->
+    <bean id="persistenceUnitManager" class="cn.org.xmind.commons.jpa.MultiConfigAwarePersistenceUnitManager">
+        <property name="persistenceXmlLocations">
+            <list>
+                <value>classpath*:META-INF/persistence.xml</value>
+            </list>
+        </property>
+        <property name="defaultDataSource" ref="dataSource"/>
+    </bean>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceUnitManager" ref="persistenceUnitManager"/>
+    </bean>
+    <bean id="transactionManager" 
+          class="org.springframework.orm.jpa.JpaTransactionManager"> 
+        <property name="entityManagerFactory" ref="entityManagerFactory"/> 
+    </bean>
+    <!--使用注解的事务驱动，只要在方法或者类上面使用@Transactional就能够使得操作支持事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
