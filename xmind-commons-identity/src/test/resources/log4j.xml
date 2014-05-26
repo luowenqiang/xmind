@@ -27,7 +27,7 @@
         <level value="TRACE" />
         <appender-ref ref="file" />
     </logger>
-    <logger name="org.fkjava">
+    <logger name="cn.org.xmind">
         <level value="DEBUG"></level>
     </logger>
     <logger name="org.hibernate">

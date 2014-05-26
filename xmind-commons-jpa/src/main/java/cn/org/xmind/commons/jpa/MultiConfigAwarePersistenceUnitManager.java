@@ -8,6 +8,9 @@ import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 import org.springframework.orm.jpa.persistenceunit.MutablePersistenceUnitInfo;
 
 /**
+ * 项目大了，往往需要在多个不同的jar里面使用不同的persistence.xml文件，但是通常都在相同的数据库中。<br/>
+ * 为了避免创建太多的EntityManagerFactory，所以才有了一个包装的方式，把多个persistence.xml文件合并到一起。<br/>
+ * 只要这些persistence.xml文件中的name是以bootstrap-persistence.xml文件中的name开头的，就能够自动合并到一起。
  *
  * @author LuoWenqiang
  */
@@ -88,25 +91,23 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
     }
 
     /**
-     * Sets the name of the persistence unit that should be used. If no such
-     * persistence unit exists, an exception will be thrown, preventing the
-     * factory to be created.
-     * <p />
-     * When the <tt>strict</tt> mode is disabled, this name is used to find all
-     * matching persistence units based on a prefix. Say for instance that the
-     * <tt>persistenceUnitName</tt> to use is <tt>pu</tt>, the following
-     * applies:
-     *
-     * pu-base will be merged pufoo will be merged base-pu will <b>not</b> be
-     * merged
-     *
-     * Make sure to configure your entity manager factory to use this name as
-     * the persistence unit
+     * 设置持久化单元的名称，必须和bootstrap-persistence.xml文件的name相同，如果没有匹配的持久化单元，将会抛出异常。 
+     * 如果是在<tt>strict</tt>模式，将精确匹配名称，否则将匹配前缀。
      *
      * @param persistenceUnitName the name of the persistence unit to use
      */
     public void setPersistenceUnitName(String persistenceUnitName) {
         this.persistenceUnitName = persistenceUnitName;
+        super.setDefaultPersistenceUnitName(persistenceUnitName);
+    }
+
+    /**
+     * The persistence unit name.
+     *
+     * @return the persistenceUnitName
+     */
+    public String getPersistenceUnitName() {
+        return persistenceUnitName;
     }
 
     /**
@@ -119,7 +120,7 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
      * @param to the target (merged) persistence unit
      */
     protected void mergePersistenceUnit(MutablePersistenceUnitInfo from, MutablePersistenceUnitInfo to) {
-        if (from.getMappingFileNames().size() != 0) {
+        if (!from.getMappingFileNames().isEmpty()) {
             for (String s : from.getMappingFileNames()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Adding entity [" + s + "]");
@@ -130,7 +131,7 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
                 LOGGER.debug("Added [" + from.getMappingFileNames().size() + "] mapping file to " + "persistence unit["
                         + to.getPersistenceUnitName() + "]");
             }
-        } else if (from.getManagedClassNames().size() != 0) {
+        } else if (!from.getManagedClassNames().isEmpty()) {
             for (String s : from.getManagedClassNames()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Adding entity [" + s + "]");
@@ -179,7 +180,7 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
      * persistence unit
      */
     private boolean isApplicationPersistenceUnit(MutablePersistenceUnitInfo pui) {
-        return (!strict && persistenceUnitName.equals(pui.getPersistenceUnitName()));
+        return (!strict && getPersistenceUnitName().equals(pui.getPersistenceUnitName()));
     }
 
     /**
@@ -199,14 +200,14 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
         if (strict) {
             return getPersistenceUnitInfo(pui.getPersistenceUnitName());
         }
-        if (pui.getPersistenceUnitName().startsWith(persistenceUnitName)) {
+        if (pui.getPersistenceUnitName().startsWith(getPersistenceUnitName())) {
             // We have a match, retrieve our persistence unit name then
-            result = getPersistenceUnitInfo(persistenceUnitName);
+            result = getPersistenceUnitInfo(getPersistenceUnitName());
             // Sanity check
             if (result == null) {
                 throw new IllegalStateException(
                         "No persistence unit found with name ["
-                        + persistenceUnitName
+                        + getPersistenceUnitName()
                         + "] "
                         + "so no merging is possible. It usually means that the bootstrap-persistence.xml has not been "
                         + "included in the list of persistence.xml location(s). Check your configuration as it "
@@ -219,8 +220,9 @@ public class MultiConfigAwarePersistenceUnitManager extends DefaultPersistenceUn
 
     /**
      * {@inheritDoc}.
+     *
      * @param puName
-     * @return 
+     * @return
      */
     @Override
     public PersistenceUnitInfo obtainPersistenceUnitInfo(String puName) {
