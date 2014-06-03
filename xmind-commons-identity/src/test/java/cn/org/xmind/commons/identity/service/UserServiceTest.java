@@ -25,6 +25,7 @@ public class UserServiceTest {
     public static void setUpClass() {
         ctx = new ClassPathXmlApplicationContext(new String[]{
             "/META-INF/spring/applicationContext_email.xml",
+            "/META-INF/spring/applicationContext_converter.xml",
             "/META-INF/spring/applicationContext_security.xml",
             "/META-INF/spring/applicationContext_identity.xml",
             "/META-INF/spring/applicationContext_identity_test.xml"});

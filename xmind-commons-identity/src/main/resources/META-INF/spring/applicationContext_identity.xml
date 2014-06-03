@@ -4,20 +4,25 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xsi:schemaLocation="
           http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
           http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-          http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd">
+          http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://cxf.apache.org/core                     http://cxf.apache.org/schemas/core.xsd
+          http://cxf.apache.org/jaxrs                    http://cxf.apache.org/schemas/jaxrs.xsd">
 
     <!--自动扫描组件的包，包括Service/Component等-->
     <context:component-scan base-package="cn.org.xmind.commons.identity.service"/>
+    <context:component-scan base-package="cn.org.xmind.commons.identity.rest"/>
     <!--使用注解自动配置Bean-->
     <context:annotation-config/>
     <!--使用注解的事务驱动，只要在方法或者类上面使用@Transactional就能够使得操作支持事务-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <!--实体管理器-->
-<!--    <bean id="identityEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <!--    <bean id="identityEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="persistenceXmlLocation"
                   value="classpath:META-INF/persistence.xml" />
@@ -30,5 +35,17 @@
     -->
     <jpa:repositories base-package="cn.org.xmind.commons.identity.db"
                       entity-manager-factory-ref="entityManagerFactory" 
-                      transaction-manager-ref="transactionManager"/> 
+                      transaction-manager-ref="transactionManager"/>
+    
+    <jaxrs:server id="identityServices" address="/identity">
+        <jaxrs:features>
+            <cxf:logging/>
+        </jaxrs:features>
+        <jaxrs:serviceBeans>
+            <ref bean="registerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="encodingAdaptionJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
 </beans>

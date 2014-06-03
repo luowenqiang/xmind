@@ -1,0 +1,11 @@
+构建顺序：
+    xmind-parent
+    xmind-commons-converter
+    xmind-commons-domain
+    xmind-commons-context
+    xmind-commons-email
+    xmind-commons-jpa
+    xmind-commons-utils
+    xmind-commons-security
+    xmind-commons-identity
+    xmind-commons-auth

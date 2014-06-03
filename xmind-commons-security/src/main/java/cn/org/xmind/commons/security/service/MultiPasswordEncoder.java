@@ -39,7 +39,7 @@ public class MultiPasswordEncoder implements PasswordEncoder {
             //使用BCrypt算法进行运算
             return this.bCryptpasswordEncoder.matches(rawPassword, encodedPassword);
         } else {
-            //使用标准算法进行运算    
+            //使用标准算法进行运算
             return this.standardPasswordEncoder.matches(rawPassword, encodedPassword);
         }
 

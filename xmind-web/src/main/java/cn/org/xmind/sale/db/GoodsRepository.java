@@ -1,6 +1,6 @@
-package cn.org.xmind.controller.sale.db;
+package cn.org.xmind.sale.db;
 
-import cn.org.xmind.controller.sale.db.entity.Goods;
+import cn.org.xmind.sale.db.entity.Goods;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

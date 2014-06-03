@@ -36,7 +36,7 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
         <!--REST-->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version>1.1.1</version>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
-            <version>1.7.1</version>
+            <version>1.9.13</version>
         </dependency>
         <!--Hibernate JPA-->
         <dependency>
@@ -64,11 +64,24 @@
             <artifactId>validation-api</artifactId>
             <version>1.1.0.Final</version>
         </dependency>
+        <!--测试时使用的H2数据库-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.178</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+        <!-- JavaEE WEB API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         
         
@@ -99,7 +112,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.xmind</groupId>
-            <artifactId>xmind-commons-vo</artifactId>
+            <artifactId>xmind-commons-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

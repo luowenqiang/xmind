@@ -1,6 +1,6 @@
 package cn.org.xmind.commons.identity.rest.vo;
 
-import cn.org.xmind.commons.vo.RestResponse;
+import cn.org.xmind.commons.domain.RestResponse;
 
 /**
  *

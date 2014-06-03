@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <context:component-scan base-package="cn.org.xmind.commons.auth.service"/>
+    <security:global-method-security pre-post-annotations="enabled"/>
+    
+    <security:http security="none" pattern="/wb_07af44511a0ef5f0.txt" />
+    <security:http security="none" pattern="/identity/login.jsp" />
+    <security:http security="none" pattern="/identity/login" />
+    <security:http security="none" pattern="/rest/identity/login" />
+    <security:http security="none" pattern="/identity/register.jsp" />
+    <security:http security="none" pattern="/identity/register" />
+    <security:http security="none" pattern="/rest/identity/register" />
+    <security:http security="none" pattern="/rest/identity/register/**" />
+    <security:http security="none" pattern="/static/**" />
+    
+    <security:http auto-config="true" use-expressions="true">
+        <security:intercept-url pattern="/**" access="hasRole('user')" />
+        <security:form-login login-page='/identity/login.jsp' 
+                             login-processing-url="/identity/do_login" 
+                             default-target-url='/index.jsp'/>
+        <security:logout logout-success-url="/identity/login.jsp" logout-url="/identity/do_logout"/>  
+        <security:remember-me user-service-ref="manualUserDetailsService"/>
+    </security:http>
+    
+    <!-- 权限管理操作 --> 
+    <security:authentication-manager>
+        <security:authentication-provider ref="authenticationProvider">
+        </security:authentication-provider>
+    </security:authentication-manager>
+    
+    
+    <bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="manualUserDetailsService" />
+        <property name="hideUserNotFoundExceptions" value="false" />
+        <property name="passwordEncoder" ref="multiPasswordEncoder" />
+    </bean>
+</beans>

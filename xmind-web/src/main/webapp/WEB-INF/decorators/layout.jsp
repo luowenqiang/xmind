@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="i18n.Settings" var="settings"/>
+<fmt:setBundle basename="i18n.Commons" var="commons"/>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -52,10 +52,10 @@
                         <c:if test="${empty SPRING_SECURITY_CONTEXT}">
                             <ul class="nav navbar-nav">
                                 <li>
-                                    <a href="<c:url value='/identity/register'/>">注册</a>
+                                    <a href="<c:url value='/identity/register.jsp'/>"><fmt:message key="web.label.register" bundle="${commons}"/></a>
                                 </li>
                                 <li>
-                                    <a href="<c:url value='/identity/login'/>">登陆</a>
+                                    <a href="<c:url value='/identity/login.jsp'/>"><fmt:message key="web.label.signIn" bundle="${commons}"/></a>
                                 </li>
                             </ul>
                         </c:if>
@@ -68,14 +68,14 @@
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="<c:url value="/identity/profile"/>"><span class="icon icon-color icon-profile"></span>
-                                                <fmt:message key="option.user.profile" bundle="${settings}"/>
+                                        <li><a href="<c:url value="/identity/profile.jsp"/>"><span class="icon icon-color icon-profile"></span>
+                                                <fmt:message key="web.label.signIn.profile" bundle="${commons}"/>
                                             </a>
                                         </li>
                                         <li class="divider"></li>
                                         <li><a href="<c:url value="/identity/do_logout"/>">
                                                 <span class="icon icon-color icon-locked"></span>
-                                                <fmt:message key="option.user.logout" bundle="${settings}"/>
+                                                <fmt:message key="web.label.signIn.signOut" bundle="${commons}"/>
                                             </a>
                                         </li>
                                     </ul>
@@ -99,5 +99,22 @@
             <p>&copy; 2014</p>
         </footer>
     </div><!--/.container-->
+
+    <!-- Modal dialog -->
+    <div class="modal fade" id="commonsTipDialog" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="commonsTipDialogTitle">提示</h4>
+                </div>
+                <div class="modal-body" id="commonsTipDialogContent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 </html>

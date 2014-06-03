@@ -11,4 +11,7 @@
             </list>  
         </property>  
     </bean>
+    
+    
+    <bean id="encodingAdaptionJsonProvider" class="cn.org.xmind.commons.converter.EncodingAdaptionJsonProvider"/>
 </beans>

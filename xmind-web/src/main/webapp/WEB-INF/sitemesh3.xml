@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
+    <mapping path="/rest/*" exclude="true"/>
     <mapping path="/static/*" exclude="true"/>
     <mapping path="/weixin/*" exclude="true"/>
     <mapping path="/**" decorator="/WEB-INF/decorators/layout.jsp"/>

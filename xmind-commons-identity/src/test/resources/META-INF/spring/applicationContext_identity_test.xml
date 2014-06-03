@@ -8,12 +8,15 @@
           http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
           http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/app_openidea" />
-        <property name="driverClass" value="com.mysql.jdbc.Driver" />
-        <property name="username" value="app_openidea" />
-        <property name="password" value="1234" />
+        <property name="url" value="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000" />
+        <property name="driverClass" value="org.h2.Driver" />
+        <property name="username" value="sa" />
+        <property name="password" value="" />
     </bean>
     <!--    <bean id="transactionManager" 
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
@@ -40,4 +43,5 @@
     </bean>
     <!--使用注解的事务驱动，只要在方法或者类上面使用@Transactional就能够使得操作支持事务-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+    
 </beans>
