@@ -105,6 +105,20 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "PWD_EXPIRE_TIME")
     private Date passwordExpireTime;
+
+    /**
+     * 密码修改时间，记录最后一次修改时间。如果是新用户，则把用户的注册时间作为此时间。
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "PWD_UPDATE_TIME")
+    private Date passwordUpdateTime;
+
+    /**
+     * 注册时间
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "REG_TIME")
+    private Date registerTime;
     /**
      * 密码是否已过期，如果是true表示未过期
      */
@@ -121,10 +135,10 @@ public class User implements Serializable {
      */
     @ManyToMany
     @JoinTable(name = "XID_USER_GROUP",
-    joinColumns =
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
-    inverseJoinColumns =
-    @JoinColumn(name = "GROUP_ID", referencedColumnName = "ID"))
+            joinColumns
+            = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
+            inverseJoinColumns
+            = @JoinColumn(name = "GROUP_ID", referencedColumnName = "ID"))
     private List<Group> groups = new LinkedList<Group>();
 
     @Override
@@ -454,5 +468,41 @@ public class User implements Serializable {
      */
     public void setGroups(List<Group> groups) {
         this.groups = groups;
+    }
+
+    /**
+     * 密码修改时间，记录最后一次修改时间。如果是新用户，则把用户的注册时间作为此时间。
+     *
+     * @return the passwordUpdateTime
+     */
+    public Date getPasswordUpdateTime() {
+        return passwordUpdateTime;
+    }
+
+    /**
+     * 密码修改时间，记录最后一次修改时间。如果是新用户，则把用户的注册时间作为此时间。
+     *
+     * @param passwordUpdateTime the passwordUpdateTime to set
+     */
+    public void setPasswordUpdateTime(Date passwordUpdateTime) {
+        this.passwordUpdateTime = passwordUpdateTime;
+    }
+
+    /**
+     * 注册时间
+     *
+     * @return the registerTime
+     */
+    public Date getRegisterTime() {
+        return registerTime;
+    }
+
+    /**
+     * 注册时间
+     *
+     * @param registerTime the registerTime to set
+     */
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
     }
 }

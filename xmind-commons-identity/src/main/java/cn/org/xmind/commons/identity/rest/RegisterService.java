@@ -39,11 +39,14 @@ public class RegisterService {
             User user) {
         RegisterResult result = new RegisterResult();
         result.setTitle("注册失败");
+        result.setErrorCode("100001");
         try {
             userService.add(user);
+            result.setErrorCode("1");
             result.setTitle("注册成功");
             result.setMessage("注册成功，但是账户未激活，请到接收发送到" + user.getEmail() + "的激活邮件，按提示进行激活。");
         } catch (IllegalArgumentException ex) {
+            result.setErrorCode("100002");
             result.setMessage("注册时出现错误：" + ex.getLocalizedMessage());
             result.setException(ex);
         }

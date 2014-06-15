@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
  */
 public class SecurityUserDetails extends org.springframework.security.core.userdetails.User {
 
-//    private User user;
+    private User user;
     private Long userId;
 
     public SecurityUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
@@ -28,14 +28,14 @@ public class SecurityUserDetails extends org.springframework.security.core.userd
                 user.isPasswordNonExpired(),
                 user.isAccountNonLocked(),
                 authorities);
-//        this.user = user;
+        this.user = user;
         this.userId = user.getId();
     }
 
     public SecurityUserDetails(User user, boolean enabled, boolean accountNonExpired,
             boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(user.getLoginName(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-//        this.user = user;
+        this.user = user;
     }
 
     /**
@@ -50,5 +50,19 @@ public class SecurityUserDetails extends org.springframework.security.core.userd
      */
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 }

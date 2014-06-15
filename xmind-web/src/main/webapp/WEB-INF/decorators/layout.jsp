@@ -52,7 +52,7 @@
                         <c:if test="${empty SPRING_SECURITY_CONTEXT}">
                             <ul class="nav navbar-nav">
                                 <li>
-                                    <a href="<c:url value='/identity/register.jsp'/>"><fmt:message key="web.label.register" bundle="${commons}"/></a>
+                                    <a href="<c:url value='/identity/register'/>"><fmt:message key="web.label.register" bundle="${commons}"/></a>
                                 </li>
                                 <li>
                                     <a href="<c:url value='/identity/login.jsp'/>"><fmt:message key="web.label.signIn" bundle="${commons}"/></a>

@@ -94,6 +94,7 @@ public class EmailUtils {
      * @param active 激活码
      */
     public static void sendActiveCode(String to, String active) {
+        logger.info("发送激活码：{}", to);
         // 获取邮件会话：连接邮件服务器。
         Session mailSession = getSession();
         if (mailSession == null) {
@@ -109,9 +110,6 @@ public class EmailUtils {
             message.setRecipient(RecipientType.TO, new InternetAddress(to));
             // 设置邮件标题
             message.setSubject("用户激活邮件");
-            // 设置内容
-            // 因为使用的是MineMessage，所以可以使用HTML内容的邮件。
-            // 第二个参数指明内容的类型，如：html。
             StringBuilder url = new StringBuilder(AgentContext.getContext().getProtocol());
             url.append("://");
             url.append(AgentContext.getContext().getDomainName());
@@ -123,6 +121,9 @@ public class EmailUtils {
             url.append(AgentContext.getContext().getContextPath());
             url.append("/identity/active?activeCode=");
             url.append(active);
+            // 设置内容
+            // 因为使用的是MineMessage，所以可以使用HTML内容的邮件。
+            // 第二个参数指明内容的类型，如：html。
             message.setContent("<a href='" + url.toString() + "'>点击激活</a>", "text/html;charset=UTF-8");
             // 发送邮件
             Transport.send(message);

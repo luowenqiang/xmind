@@ -1,6 +1,5 @@
 package cn.org.xmind.commons.identity.service;
 
-
 import cn.org.xmind.commons.email.MailService;
 import cn.org.xmind.commons.email.MailType;
 import cn.org.xmind.commons.identity.db.AccountActiveLogRepository;
@@ -20,6 +19,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
 /**
  *
  * @author rodney
@@ -44,24 +44,30 @@ public class UserService {
     public void add(User user) {
         logger.log(Level.ALL, "添加用户信息");
         //把登录名和用户名设置为一样，页面不传递用户名过来
-        user.setUserName(user.getLoginName());
+        //user.setUserName(user.getLoginName());
         if (user.getNickName() == null) {
             //如果没有填写昵称，把昵称设置为和用户名相同
             user.setNickName(user.getUserName());
         }
         //检查电子邮件、登录名等是否已经存在，如果已经存在则不允许注册
-        boolean isExisted = this.checkLoginNameIsExisted(user.getLoginName());
-        if (isExisted) {
-            throw new IllegalArgumentException("登录名" + user.getLoginName() + "已经存在，不能重复注册");
+        boolean isExisted;
+        if (user.getLoginName() != null) {
+            isExisted = this.checkLoginNameIsExisted(user.getLoginName());
+            if (isExisted) {
+                throw new IllegalArgumentException("登录名" + user.getLoginName() + "已经存在，不能重复注册");
+            }
         }
         isExisted = this.checkEmailIsExisted(user.getEmail());
         if (isExisted) {
             throw new IllegalArgumentException("电子邮件" + user.getEmail() + "已经被注册过，不能重复注册");
         }
-
+        Date current = new Date();
         //String password = user.getPassword();
         String encodePassword = multiPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
+        user.setPasswordUpdateTime(current);
+        user.setRegisterTime(current);
+
         //数据校验通过，执行注册，把数据写入数据库中
         userRepository.saveAndFlush(user);
         //生成激活码
@@ -103,6 +109,9 @@ public class UserService {
                     //旧密码验证通过
                     String encodePassword = multiPasswordEncoder.encode(newPassword);
                     user.setPassword(encodePassword);
+
+                    //修改密码修改时间
+                    user.setPasswordUpdateTime(new Date());
                     //保存修改后的用户信息，主要是更新了密码和salt值
                     userRepository.save(user);
                 } else {

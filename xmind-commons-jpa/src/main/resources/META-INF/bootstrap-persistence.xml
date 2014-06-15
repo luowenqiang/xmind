@@ -10,6 +10,7 @@
             <property name="hibernate.max_fetch_depth" value="3"/>
             <!--自动输出schema创建DDL语句 -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
